@@ -157,14 +157,22 @@ body {
     display: flex;
   }
 
-  
   #menu {
     padding-top: 0;
     /* gap: 1rem; */
-    max-width: 65%;
+    max-width: 70%;
     transform: translateX(-100%);
   }
+
+  #menu:target {
+    width: 70%;
+  }
   
+  #menu:active,
+  #menu:hover {
+    width: none;
+  }
+
   #menu .menu-header {
     margin-block: 1rem;
   }
@@ -172,7 +180,7 @@ body {
   #menu #btn_close_menu {
     display: flex;
   }
-  
+
   :popover-open {
     width: 100%;
     max-width: 95%;
