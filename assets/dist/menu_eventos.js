@@ -1,13 +1,27 @@
+"mode strict";
+
+/* Mapeamento de script
+
+*! Script usado para separar dar parte principal 
+
+* adicionarItemMenu() usado para apagar informações do localstorage
+** popover event usado para identificar o popover especifico quando aberto
+
+*/
+
 const lista_ajuste = document.querySelector(".ajuste-lista");
-const btn_settings = document.getElementById("button_settings");
+const popover = document.getElementById("popover_settings");
 //
-function criarListaURLSalvas() {
+// cria uma lista quando o popover for aberto
+function adicionarItemMenu() {
+  // converte objeto salvo
   let lista = localStorage.getItem("listaSalva");
+  lista = JSON.parse(lista);
+  //
   lista_ajuste.innerHTML = "";
   //
-  let array = JSON.parse(lista);
-  //
-  array.forEach((item, index) => {
+  // carrega todos os objetos
+  lista.forEach((item, index) => {
     //
     const li = document.createElement("li");
     li.textContent = item.name;
@@ -16,28 +30,33 @@ function criarListaURLSalvas() {
     button.setAttribute("title", "botão de apagar item do menu");
     button.type = "button";
     button.innerHTML = `<i class="fi fi-rr-trash-xmark"></i>`;
-    // Evento do butão
+    // Faz um evento de eliminar informações salvas
     button.addEventListener("click", () => {
-      let listaAtualizada = localStorage.getItem("listaSalva");
       //
-      let atualizarArray = JSON.parse(listaAtualizada);
+      // Ao ser criado retorna informações do objeto salvo
+      let lista = localStorage.getItem("listaSalva");
+      let listaNova = JSON.parse(lista);
       //
-      atualizarArray.splice(index, 1);
-      console.log(atualizarArray);
+      listaNova.splice(index, 1);
       //
-      atualizarArray = JSON.stringify(atualizarArray);
+      localStorage.setItem("listaSalva", JSON.stringify(listaNova));
       //
-      localStorage.setItem("listaSalva", atualizarArray);
+      // Atualiza Itens do Menu
+      adicionarItemMenu();
       //
-      // Atualizar lista Salva no DOM
-      criarListaURLSalvas();
     });
     //
     li.appendChild(button);
     lista_ajuste.appendChild(li);
   });
-  array = JSON.stringify(array);
-  localStorage.setItem("listaSalva", array);
+  lista = JSON.stringify(lista);
+  localStorage.setItem("listaSalva", lista);
 }
 
-btn_settings.addEventListener("click", criarListaURLSalvas);
+popover.addEventListener("beforetoggle", (event) => {
+  if (event.newState === "open") {
+    adicionarItemMenu();
+  } else {
+    window.location.reload();
+  }
+});

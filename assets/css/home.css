@@ -148,13 +148,10 @@
     background-color 400ms;
 }
 
-#menu .menu-container .navbar-menu li button#button_search {
+#menu .menu-container .navbar-menu li button#button_menu_search {
   display: none;
 }
 
-#menu .menu-container .navbar-menu li button#button_search.showButton {
-  display: flex;
-}
 
 #menu .menu-container .navbar-menu li button span {
   background-color: transparent;
@@ -184,10 +181,16 @@
   background-color: rgba(213, 220, 227, 0.05);
 }
 
+.menu-lista-salvamento li button,
+.menu-lista-salvamento li button span {
+  transition: color 1000ms;
+}
+
 .container {
   display: flex;
   height: calc(100vh - 144px);
-  padding-inline: 5%;
+  padding: 0;
+  padding-inline: 8% 2%;
 }
 
 .lista-itens-carregados {
@@ -301,7 +304,7 @@
 .popover-style .input-area {
   display: flex;
   align-items: center;
-  height: 2.8rem;
+  height: 3rem;
   width: 90%;
 }
 
@@ -420,10 +423,6 @@
   letter-spacing: 1px;
 }
 
-#sem_lista.remove-text {
-  display: none;
-}
-
 .painel-controle {
   display: none;
   align-items: center;
@@ -432,9 +431,6 @@
   height: 72px;
 }
 
-.painel-controle.painel-visible {
-  display: flex;
-}
 
 .painel-controle .paginacao p {
   font-size: 0.8em;

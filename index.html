@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lista de jogos</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="assets/images/favicon_zanka.png"
+    />
+    <title>Leitura de JSON</title>
 
     <!-- Links -->
     <link rel="stylesheet" href="assets/css/main.css" />
@@ -14,14 +19,17 @@
         <div>
           <a href="#menu" id="btn_menu"><i class="fi fi-br-menu-burger"></i></a>
           <a href="index.html">
-            <img src="assets/images/zanka (2).jpg" alt="logo do site"
+            <img src="assets/images/zanka.jpg" alt="logo do site"
           /></a>
           <h2 id="name_pack"></h2>
         </div>
 
         <ul class="list-midia">
           <li>
-            <a href="#" title="Github autor"
+            <a
+              href="https://github.com/Ominitriix/GamingTrue"
+              target="_blank"
+              title="Github autor"
               ><i class="fi fi-brands-github"></i
             ></a>
           </li>
@@ -75,7 +83,7 @@
           </li>
           <li>
             <button
-              id="button_search"
+              id="button_menu_search"
               popovertarget="popover_search"
               popovertargetaction="show"
               title="Procurar"
@@ -127,7 +135,6 @@
             id="button_add_list"
             popovertarget="popover_settings"
             popovertargetaction="hide"
-            onclick="adicionarUrl()"
           >
             <i class="fi fi-br-add"></i>
           </button>
@@ -171,7 +178,6 @@
             id="button_search"
             popovertarget="popover_search"
             popovertargetaction="hide"
-            onclick="buscarItens()"
           >
             <i class="fi fi-br-search"></i>
           </button>

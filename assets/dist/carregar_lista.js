@@ -1,20 +1,44 @@
 "mode strict";
 
+/* Mapeamento do script
+
+* verificarListaSalva(funciton) Atalho para criação de dado e leitura do localstorage.
+---------------------------------------------------------------------------------------------------
+* adicionarURL() faz um assicrono até a estrutura ser contruida, aguarda até completar;
+** carregarURL() faz uma requisição usando fetch para que retorne um Json e controla animações;
+*** criarLista() nessa parte faz uma interação no objeto retornado no FETCH e criar itens no DOM.
+---------------------------------------------------------------------------------------------------
+*! Instanciei 2 objetos, o primeiro representa o que irá armazenar o objeto retornado no fetch. 
+  O segundo vai conter uma replica do objeto primário. porém apenas com dados feitos de uma
+  busca feita pela função buscarItens.
+
+* butões de controle de paginação, todos os dois confere qual objeto esta sendo usado.
+* botão de atualizar, retorna ao objeto primário e sua posição em paginas
+---------------------------------------------------------------------------------------------------
+* buscarItens() atribui ao objeto secundario a replica com o itens desejados
+---------------------------------------------------------------------------------------------------
+* salvarDadosLista() recebe informações do objeto primario como o nome e url para usar como um 
+  atalho para usos posteriores.
+** criarItemMenu() faz a leitura de objetos salvos no localstorage e adciona ao menu lateral.
+---------------------------------------------------------------------------------------------------
+* GerarCorAleatória() apenas um detalhe para se destrair
+
+*/
+
 // Todas as chamadas de seletores
 const countPaginacao = document.getElementById("paginacao_count");
 const container = document.querySelector(".lista-itens-carregados");
 const btn_voltar = document.getElementById("button_voltar");
 const btn_proximo = document.getElementById("button_proximo");
 const btn_atualizar = document.getElementById("button_atualizar");
+const btn_adicionar = document.getElementById("button_add_list");
+const btn_menu_search = document.getElementById("button_menu_search");
 const btn_search = document.getElementById("button_search");
 
+// let listaSalva = localStorage.clear();
 // Confere se existe dados salvos, senão cria um array vazio
 let listaSalva = localStorage.getItem("listaSalva") || JSON.stringify([]);
-console.log(listaSalva);
 
-// let listaSalva = localStorage.clear();
-// Verifica se tem dados salvos
-verificarListaSalva();
 // URL modelo para criar botão de atalho em lista salvas
 let url = "";
 
@@ -27,41 +51,63 @@ let dadosListaSecundary = "";
 let firstPage;
 let lastPage;
 
-// divisao de paginas, 16 item em cada
+// divisao de paginas, 16 item em cada. Começa em 0 / 16
 let start;
 let end;
 
+// Verifica se tem dados salvos
+verificarListaSalva(criarItemMenu);
+
+// Adiciona ao menu os itens salvos
+function verificarListaSalva(func) {
+  if (listaSalva != "[]") {
+    //
+    listaSalva = JSON.parse(listaSalva);
+    func();
+    listaSalva = JSON.stringify(listaSalva);
+    //
+    return;
+  }
+  console.log("Não há item salvo");
+}
+
 // Função para carregar url
-async function adicionarUrl() {
+async function adicionarURL() {
   const inputValueUrl = document.getElementById("url_list").value;
-  const btn_add = document.getElementById("button_add_list");
+  //
   // Evitando muitas repetições
-  btn_add.disabled = true;
+  btn_adicionar.disabled = true;
   //
   // Limpa e adicionar os proximos itens
   container.innerHTML = "";
   //
   if (inputValueUrl === "" || !inputValueUrl.includes(".json")) {
     alert("Campo invalido!");
-    btn_add.disabled = false;
+    btn_adicionar.disabled = false;
     return;
   }
   // Salva a url para usos futuros
   url = inputValueUrl;
   // Carrega todas as informações no DOM
-  await carregarUrl(inputValueUrl);
+  await carregarURL(inputValueUrl);
   // Salva informações para criar atalho
-  verificarListaSalvaJSON();
+  verificarListaSalva(salvarDadosLista);
+  localStorage.setItem("listaSalva", listaSalva);
   //
-  btn_add.disabled = false;
+  btn_adicionar.disabled = false;
 }
 
+btn_adicionar.addEventListener("click", adicionarURL);
+
 // Faz um promise e retorna informações para criação dos itens no DOM
-async function carregarUrl(url) {
+async function carregarURL(url) {
   const tela_sem_lista = document.getElementById("sem_lista");
   const animacao_carregamento = document.getElementById("carregamento_lista");
   const painel = document.querySelector(".painel-controle");
-
+  const visibilidade = {
+    show: "flex",
+    hide: "none",
+  };
   // Atribui os valores iniciais toda vez que carrega
   // para que não haja falha ao add uma nova URL ou até a mesma
   firstPage = 1;
@@ -70,9 +116,9 @@ async function carregarUrl(url) {
 
   try {
     // Animação
-    container.style.display = "none";
-    animacao_carregamento.classList.add("loadingON");
-    tela_sem_lista.classList.add("remove-text");
+    container.style.display = visibilidade.hide;
+    animacao_carregamento.style.display = "grid";
+    tela_sem_lista.style.display = visibilidade.hide;
     //
     let response = await fetch(url);
     let lista = await response.json();
@@ -88,26 +134,26 @@ async function carregarUrl(url) {
     criarLista(dadosLista);
     //
     // Animação
-    container.style.display = "flex";
-    painel.classList.add("painel-visible");
-    btn_search.classList.add("showButton");
+    container.style.display = visibilidade.show;
+    painel.style.display = visibilidade.show;
+    btn_menu_search.style.display = visibilidade.show;
     //
   } catch (e) {
     //
     // Animações
-    tela_sem_lista.classList.remove("remove-text");
+    tela_sem_lista.style.display = "grid";
     //
-    animacao_carregamento.classList.remove("loadingON");
+    animacao_carregamento.style.display = visibilidade.hide;
     //
-    painel.classList.remove("painel-visible");
+    painel.style.display = visibilidade.hide;
     //
-    btn_search.classList.remove("showButton");
+    btn_menu_search.style.display = visibilidade.hide;
     //
     console.log("Error encontrado", e);
   } finally {
     // Animações
     //
-    animacao_carregamento.classList.remove("loadingON");
+    animacao_carregamento.style.display = visibilidade.hide;
     //
   }
 }
@@ -232,49 +278,38 @@ function buscarItens() {
   criarLista(dadosListaSecundary);
 }
 
-// Função que verifica os valores e salva um novo objeto se inexistente.
-// Torna o objeto pronto para leitura e assim cria e carrega um elemento no menu.
-function verificarListaSalvaJSON() {
-  //
-  listaSalva = JSON.parse(listaSalva);
-  salvarDadosLista();
-  listaSalva = JSON.stringify(listaSalva);
-  localStorage.setItem("listaSalva", listaSalva);
-  //
-}
+// Faz uma busca dos itens
+btn_search.addEventListener("click", buscarItens);
 
 // Faz uma verificação no nome do pack e cria uma id, assim cria um objeto para ser salvo
 function salvarDadosLista() {
-  // ListaSalva é a lista onde toda informação de salvamento vai esta
   //
+  // ListaSalva é a lista onde toda informação de salvamento vai esta
   let namePackDefault = dadosLista.name;
-  // Cria um count para as id ao criar um item
-  let i = listaSalva.length + 1;
+  //
   // Listando nomes iguais e depois adicionando um count a cada item igual
-  let listaNomes = [];
+  let listaNomesRepetidos = [];
   //
   // Separa todos os nomes iguais e salva em uma array
   listaSalva.filter((namePack) => {
     if (namePack.name.toLowerCase().includes(namePackDefault.toLowerCase())) {
-      listaNomes.push(namePackDefault);
+      listaNomesRepetidos.push(namePackDefault);
     }
   });
   //
   // Pega o primeiro resultado que retorna TRUE e adiciona um contador ao seu nome
-  if (listaNomes.includes(namePackDefault)) {
+  if (listaNomesRepetidos.length !== 0) {
     //
-    let countNames = listaNomes.length + 1;
+    let countNames = listaNomesRepetidos.length + 1;
     namePackDefault += " " + countNames;
     //
     listaSalva.push({
-      id: i,
       name: namePackDefault,
       url: url,
     });
   } else {
     //
     listaSalva.push({
-      id: i,
       name: namePackDefault,
       url: url,
     });
@@ -293,9 +328,6 @@ function criarItemMenu() {
   //
   listaSalva.forEach((item) => {
     //
-    ///gera uma cor aleatoria
-    let corAleatoria = gerarCorAleatoria();
-    //
     const li = document.createElement("li");
     li.setAttribute("class", "item-lista");
     //
@@ -306,34 +338,20 @@ function criarItemMenu() {
       let arcoiris = gerarCorAleatoria();
       button.style.color = arcoiris;
       span.style.color = arcoiris;
-    }, 600);
+    }, 1000);
     //
     button.addEventListener("click", () => {
       container.innerHTML = "";
-      carregarUrl(item.url);
+      carregarURL(item.url);
     });
     //
     const span = document.createElement("span");
     span.textContent = item.name.slice(0, 2);
-    span.style.color = corAleatoria;
     //
     button.appendChild(span);
     li.appendChild(button);
     menu_container.appendChild(li);
   });
-}
-
-// Atualiza menu com os itens salvos
-function verificarListaSalva() {
-  if (listaSalva != "[]") {
-    //
-    listaSalva = JSON.parse(listaSalva);
-    criarItemMenu();
-    listaSalva = JSON.stringify(listaSalva);
-    //
-    return;
-  }
-  console.log("Não há item salvo");
 }
 
 function gerarCorAleatoria() {
