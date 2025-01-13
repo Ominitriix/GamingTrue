@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="assets/images/favicon_zanka.png"
+    />
+    <title>Leitura de JSON</title>
+
+    <!-- Links -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div>
+          <a href="#menu" id="btn_menu"><i class="fi fi-br-menu-burger"></i></a>
+          <a href="index.html">
+            <img src="assets/images/zanka.jpg" alt="logo do site"
+          /></a>
+          <h2 id="name_pack"></h2>
+        </div>
+
+        <ul class="list-midia">
+          <li>
+            <a
+              href="https://github.com/Ominitriix/GamingTrue"
+              target="_blank"
+              title="Github autor"
+              ><i class="fi fi-brands-github"></i
+            ></a>
+          </li>
+          <!-- <li>
+            <a href="#" title="Instagram"
+              ><i class="fi fi-brands-instagram"></i
+            ></a>
+          </li>
+          <li>
+            <a href="#" title="Facebook"
+              ><i class="fi fi-brands-facebook"></i
+            ></a>
+          </li> -->
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Menu geral -->
+    <aside id="menu">
+      <div class="menu-header">
+        <a href="#" id="button_close_menu"
+          ><i class="fi fi-rr-cross-small"></i
+        ></a>
+      </div>
+      <div class="menu-container">
+        <ul class="navbar-menu">
+          <li>
+            <button
+              popovertarget="popover_add"
+              popovertargetaction="show"
+              title="Adicionar"
+            >
+              Adicionar
+              <span>
+                <i class="fi fi-rr-add"></i>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button
+              title="Configurar"
+              popovertarget="popover_settings"
+              popovertargetaction="show"
+              id="button_settings"
+            >
+              Configurar
+              <span>
+                <i class="fi fi-rr-settings"></i>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button
+              id="button_menu_search"
+              popovertarget="popover_search"
+              popovertargetaction="show"
+              title="Procurar"
+            >
+              Procurar
+              <span>
+                <i class="fi fi-rr-search"></i>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button
+              popovertarget="popover_help"
+              popovertargetaction="show"
+              title="Ajuda"
+            >
+              Ajuda
+              <span>
+                <i class="fi fi-rr-parachute-box"></i>
+              </span>
+            </button>
+          </li>
+        </ul>
+        <hr />
+        <ul class="navbar-menu menu-lista-salvamento"></ul>
+      </div>
+
+      <p id="copy_right">v1.0 Ominitriix &copy; 2024</p>
+    </aside>
+
+    <!-- popover de adicionar -->
+    <div class="popover-style" id="popover_add" popover>
+      <div class="popover-header">
+        <h2>Adicione uma URL</h2>
+        <button
+          id="button_hide_popover"
+          popovertarget="popover_add"
+          popovertargetaction="hide"
+        >
+          <i class="fi fi-rr-cross-small"></i>
+        </button>
+      </div>
+
+      <label for="url_list">Adicione uma url </label>
+      <div class="input-area">
+        <input type="text" id="url_list" placeholder="Adicione sua lista" />
+        <a href="#">
+          <button
+            id="button_add_list"
+            popovertarget="popover_settings"
+            popovertargetaction="hide"
+          >
+            <i class="fi fi-br-add"></i>
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <!-- popover de configurar -->
+    <div class="popover-style container-settings" id="popover_settings" popover>
+      <div class="popover-header">
+        <h2>Ajuste seu menu</h2>
+        <button
+          id="button_hide_popover"
+          popovertarget="popover_settings"
+          popovertargetaction="hide"
+        >
+          <i class="fi fi-rr-cross-small"></i>
+        </button>
+      </div>
+      <h3>Apagar uma url salva?</h3>
+      <ul class="ajuste-lista"></ul>
+    </div>
+
+    <!-- popover de busca -->
+    <div class="popover-style" id="popover_search" popover>
+      <div class="popover-header">
+        <h2>Busque o que deseja</h2>
+        <button
+          id="button_hide_popover"
+          popovertarget="popover_search"
+          popovertargetaction="hide"
+        >
+          <i class="fi fi-rr-cross-small"></i>
+        </button>
+      </div>
+      <label for="search_list">Procure aqui</label>
+      <div class="input-area">
+        <input type="text" id="search_list" placeholder="God of war Ragnarok" />
+        <a href="#">
+          <button
+            id="button_search"
+            popovertarget="popover_search"
+            popovertargetaction="hide"
+          >
+            <i class="fi fi-br-search"></i>
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <!-- popover Ajuda -->
+    <div class="popover-style popover-help" id="popover_help" popover>
+      <div class="popover-header">
+        <h2>Ajuda</h2>
+        <button
+          id="button_hide_popover"
+          popovertarget="popover_help"
+          popovertargetaction="hide"
+        >
+          <i class="fsi fi-rr-cross-small"></i>
+        </button>
+      </div>
+      <h3>Objetivo</h3>
+      <p>
+        Site contruido para facilitar acesso a listas em formato .JSON. A ideia
+        é poder iteragir com os itens e a facilidade sem necessitar de
+        aplicações complexas.
+      </p>
+      <h3>Como usar?</h3>
+      <p>
+        Para que funcione, tenha em mãos uma URL com uma extenção .json
+        <em>(https://url.json).</em> Com isso, ira carregar todos os dados em
+        sua tela. Para adicionar você basta clicar em <b>Adicionar</b>, se
+        estiver tudo certo, você terá o resultado que deseja.
+      </p>
+      <h3>Como encontrar meu item?</h3>
+      <p>
+        No menu vai esta disponivel a opção de <b>Pesquisar</b> quando uma lista
+        estiver carregada. Você pode buscar por palavras chaves ou o nome em
+        expecifico.
+      </p>
+      <h3>Que tipo de lista funciona?</h3>
+      <p>
+        As listas .JSON seguem um padrão de estrutura com chaves especificas e
+        se seguir as regras irá carregar normalmente.
+      </p>
+    </div>
+    <main>
+      <!--  -->
+      <div class="container">
+        <!-- Carregamento de lista -->
+        <div class="lista-itens-carregados"></div>
+        <div id="sem_lista">Adicione uma lista</div>
+        <div class="container-carregamento" id="carregamento_lista">
+          <div class="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <div class="painel-controle">
+        <div class="paginacao">
+          <p id="paginacao_count">0 / 0 de 0</p>
+        </div>
+        <div class="controle-paginacao">
+          <button
+            class="button-default-controle"
+            id="button_voltar"
+            title="voltar"
+          >
+            <i class="fi fi-rr-arrow-small-left"></i>
+          </button>
+          <button
+            class="button-default-controle"
+            id="button_proximo"
+            title="próximo"
+          >
+            <i class="fi fi-rr-arrow-small-right"></i>
+          </button>
+          <button
+            class="button-default-controle"
+            id="button_atualizar"
+            title="atualizar"
+          >
+            <i class="fi fi-rr-refresh"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+    <script src="assets/dist/carregar_lista.js"></script>
+    <script src="assets/dist/menu_eventos.js"></script>
+  </body>
+</html>
