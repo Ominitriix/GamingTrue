@@ -25,6 +25,38 @@
 
 */
 
+// Confere se o navegador tem suporte ao Localstorage
+function storageAvailable(type) {
+  try {
+    var storage = window[type],
+      x = "__storage_test__";
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  } catch (e) {
+    return (
+      e instanceof DOMException &&
+      // everything except Firefox
+      (e.code === 22 ||
+        // Firefox
+        e.code === 1014 ||
+        // test name field too, because code might not be present
+        // everything except Firefox
+        e.name === "QuotaExceededError" ||
+        // Firefox
+        e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage.length !== 0
+    );
+  }
+}
+
+if (!storageAvailable("localStorage")) {
+  document.body.style.display = "none";
+  throw new Error("Seu navegador não tem suporte ao site.");
+}
+
+
 // Todas as chamadas de seletores
 const countPaginacao = document.getElementById("paginacao_count");
 const container = document.querySelector(".lista-itens-carregados");
@@ -56,14 +88,14 @@ let start;
 let end;
 
 // Verifica se tem dados salvos
-verificarListaSalva(criarItemMenu);
+adicionarItemSalvoMenu();
 
 // Adiciona ao menu os itens salvos
-function verificarListaSalva(func) {
-  if (listaSalva != "[]") {
+function adicionarItemSalvoMenu() {
+  if (listaSalva !== "[]") {
     //
     listaSalva = JSON.parse(listaSalva);
-    func();
+    criarItemMenu();
     listaSalva = JSON.stringify(listaSalva);
     //
     return;
@@ -71,28 +103,42 @@ function verificarListaSalva(func) {
   console.log("Não há item salvo");
 }
 
+function salvarListaJson() {
+  //
+  listaSalva = JSON.parse(listaSalva);
+  //
+  salvarDadosLista();
+  //
+  listaSalva = JSON.stringify(listaSalva);
+  //
+  localStorage.setItem("listaSalva", listaSalva);
+}
+
 // Função para carregar url
 async function adicionarURL() {
   const inputValueUrl = document.getElementById("url_list").value;
-  //
+
   // Evitando muitas repetições
   btn_adicionar.disabled = true;
-  //
+
   // Limpa e adicionar os proximos itens
   container.innerHTML = "";
+
   //
-  if (inputValueUrl === "" || !inputValueUrl.includes(".json")) {
+  if (!inputValueUrl || !inputValueUrl.includes(".json")) {
     alert("Campo invalido!");
     btn_adicionar.disabled = false;
     return;
   }
+
   // Salva a url para usos futuros
   url = inputValueUrl;
+
   // Carrega todas as informações no DOM
   await carregarURL(inputValueUrl);
+
   // Salva informações para criar atalho
-  verificarListaSalva(salvarDadosLista);
-  localStorage.setItem("listaSalva", listaSalva);
+  salvarListaJson();
   //
   btn_adicionar.disabled = false;
 }
@@ -108,6 +154,7 @@ async function carregarURL(url) {
     show: "flex",
     hide: "none",
   };
+
   // Atribui os valores iniciais toda vez que carrega
   // para que não haja falha ao add uma nova URL ou até a mesma
   firstPage = 1;
@@ -206,7 +253,9 @@ function criarLista(data) {
   // Informação do painel
   lastPage = Math.round(data.downloads.length / 16);
   //
-  if (lastPage === 0) lastPage = 1;
+  if (lastPage === 0) {
+    lastPage = 1;
+  }
   //
   countPaginacao.innerHTML = `${firstPage} / ${lastPage} de ${data.downloads.length}`;
 }

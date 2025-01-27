@@ -142,6 +142,7 @@
   border-left: 3px solid transparent;
   background-color: transparent;
   font-size: 0.9em;
+  letter-spacing: 0.5px;
 
   transition:
     color 400ms,
@@ -151,7 +152,6 @@
 #menu .menu-container .navbar-menu li button#button_menu_search {
   display: none;
 }
-
 
 #menu .menu-container .navbar-menu li button span {
   background-color: transparent;
@@ -257,7 +257,7 @@
   --lineHeight: 2;
 
   padding: 1rem;
-  
+
   background-color: #1e1f21;
   border-radius: 0.2rem;
   border: 2px solid var(--border);
@@ -279,7 +279,7 @@
   text-transform: capitalize;
   color: var(--color-txt-dark);
   line-height: 2;
-  
+
   white-space: nowrap;
   overflow-y: hidden;
   overflow-x: scroll;
@@ -290,7 +290,8 @@
   line-height: var(--lineHeight);
   color: var(--color-txt-light);
   font-weight: 300;
-  font-size: 0.9em;
+  font-size: 1em;
+  letter-spacing: 0.5px;
 }
 
 .popover-style label {
@@ -298,7 +299,8 @@
   line-height: var(--lineHeight);
   color: var(--color-txt-light);
   font-weight: 300;
-  font-size: 0.9em;
+  font-size: 1em;
+  letter-spacing: 0.5px;
 }
 
 .popover-style .input-area {
@@ -346,7 +348,7 @@
 
 .popover-help h3 {
   color: var(--color-txt-dark);
-  font-size: 1.1em;
+  font-size: 1.2em;
   font-weight: 500;
   letter-spacing: 1px;
 }
@@ -354,7 +356,8 @@
 .popover-help p {
   color: var(--color-txt-light);
   font-size: 0.8em;
-  font-weight: 300;
+  font-weight: 200;
+  line-height: 1.5;
   text-align: justify;
 }
 
@@ -430,7 +433,6 @@
   padding: 0 15%;
   height: 72px;
 }
-
 
 .painel-controle .paginacao p {
   font-size: 0.8em;
